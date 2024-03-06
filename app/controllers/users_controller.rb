@@ -13,13 +13,23 @@ class UsersController < ApplicationController
     end
   end
 
+  # def upload_image
+  #   user = User.find(params[:user_id])
+
+  #   if user.image.attach(params[:image])
+  #     render json: { message: "Image uploaded" }, status: :ok
+  #   else
+  #     render json: { message: "Image upload failed"}, status: :unprocessable_entity
+  #   end
+  # end
+
   def upload_image
     user = User.find(params[:user_id])
 
-    if user.image.attach(params[:image])
-      render json: { message: "Image uploaded" }, status: :ok
+    if params[:image] && user.image.attach(params[:image])
+      renderr json: { message: "Image uploaded", url: rails_blob_url(user.image, only_path: false) }, status: :ok
     else
-      render json: { message: "Image upload failed"}, status: :unprocessable_entity
+      render json: { message: "Image upload failed" }, status: :unprocessable_entity
     end
   end
 end
